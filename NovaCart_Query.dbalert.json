@@ -1,0 +1,33 @@
+{
+  "custom_summary": "Order Count Excced",
+  "evaluation": {
+    "source": {
+      "name": "count(order_id)",
+      "display": "source",
+      "aggregation": "COUNT"
+    },
+    "comparison_operator": "GREATER_THAN",
+    "threshold": {
+      "value": {
+        "double_value": 300.0
+      }
+    },
+    "empty_result_state": "TRIGGERED",
+    "notification": {
+      "retrigger_seconds": 0,
+      "notify_on_ok": true
+    }
+  },
+  "schedule": {
+    "quartz_cron_schedule": "49 30 20 * * ?",
+    "timezone_id": "Asia/Calcutta"
+  },
+  "query_lines": [
+    "select distinct(count(order_id)) from novacart_adb.gold.orders_information"
+  ],
+  "custom_description_lines": [
+    "Hi Novacart Team,",
+    "",
+    "Kindly check check the total order for your e-commerence Novacart case study as it has exceed the thershold value set by the team.<br><br>Regards,<br>Charankumar"
+  ]
+}
