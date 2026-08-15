@@ -1,0 +1,524 @@
+{
+  "datasets": [
+    {
+      "name": "4733443c",
+      "displayName": "category_performance",
+      "queryLines": [
+        "select * from novacart_adb.gold.category_performance"
+      ],
+      "catalog": "novacart_adb",
+      "schema": "gold"
+    },
+    {
+      "name": "3fb1acaf",
+      "displayName": "orders_information",
+      "queryLines": [
+        "select * from novacart_adb.gold.orders_information"
+      ],
+      "catalog": "novacart_adb",
+      "schema": "gold"
+    },
+    {
+      "name": "total_orders_scalar",
+      "displayName": "Total Orders Scalar",
+      "queryLines": [
+        "SELECT\n",
+        "  COUNT(order_id) AS total_orders,\n",
+        "  'all' AS period\n",
+        "FROM\n",
+        "  novacart_adb.gold.orders_information"
+      ]
+    },
+    {
+      "name": "total_products_scalar",
+      "displayName": "Total Paid Amount Scalar",
+      "queryLines": [
+        "SELECT\n",
+        "  SUM(paid_amount) AS total_paid_amount,\n",
+        "  'all' AS period\n",
+        "FROM\n",
+        "  novacart_adb.gold.orders_information"
+      ]
+    },
+    {
+      "name": "gmv_scalar",
+      "displayName": "GMV Scalar",
+      "queryLines": [
+        "SELECT\n",
+        "  SUM(order_amount) AS gross_merchandise_value,\n",
+        "  'all' AS period\n",
+        "FROM\n",
+        "  novacart_adb.gold.orders_information\n",
+        "WHERE\n",
+        "  order_amount > 0"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "a91de4d1",
+      "displayName": "page-1",
+      "layout": [
+        {
+          "widget": {
+            "name": "ed54e82e",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# <span style=\"text-align:center;display:block\"><span style=\"color:#077A9D;font-family:Trebuchet MS\">NovaCart Dashboard</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "33fa0d35",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "total_orders_scalar",
+                  "fields": [
+                    {
+                      "name": "period",
+                      "expression": "`period`"
+                    },
+                    {
+                      "name": "total_orders",
+                      "expression": "`total_orders`"
+                    }
+                  ],
+                  "disaggregated": true,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "`period`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Orders",
+                "showTitle": true,
+                "version": 1
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "total_orders"
+                },
+                "period": {
+                  "fieldName": "period"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "6ad4de5a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "total_products_scalar",
+                  "fields": [
+                    {
+                      "name": "period",
+                      "expression": "`period`"
+                    },
+                    {
+                      "name": "total_paid_amount",
+                      "expression": "`total_paid_amount`"
+                    }
+                  ],
+                  "disaggregated": true,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "`period`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Paid Amount",
+                "showTitle": true,
+                "version": 1
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "total_paid_amount",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                },
+                "period": {
+                  "fieldName": "period"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "ea4fc76d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "gmv_scalar",
+                  "fields": [
+                    {
+                      "name": "period",
+                      "expression": "`period`"
+                    },
+                    {
+                      "name": "gross_merchandise_value",
+                      "expression": "`gross_merchandise_value`"
+                    }
+                  ],
+                  "disaggregated": true,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "`period`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Gross Merchandise Value",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "gross_merchandise_value",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                },
+                "period": {
+                  "fieldName": "period"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 1,
+            "width": 5,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "855eb1a6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "4733443c",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Total Orders per Category",
+                "showTitle": true,
+                "version": 1
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 1
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_orders)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f989bae5",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "4733443c",
+                  "fields": [
+                    {
+                      "name": "avg(avg_payment_completion_ratio)",
+                      "expression": "AVG(`avg_payment_completion_ratio`)"
+                    },
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Avg Payment Completion Ratio per Category",
+                "showTitle": true,
+                "version": 1
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "avg(avg_payment_completion_ratio)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "LIFESTYLE",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 2
+                        }
+                      },
+                      {
+                        "value": "ELECTRONICS",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 7
+                        }
+                      },
+                      {
+                        "value": "FITNESS",
+                        "color": {
+                          "themeColorType": "visualizationColors",
+                          "position": 5
+                        }
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "34753aa9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "4733443c",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "sum(Gross_merchandise_value)",
+                      "expression": "SUM(`Gross_merchandise_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Gross Merchandise Value per Category",
+                "showTitle": true,
+                "version": 1
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Gross_merchandise_value)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 10,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
